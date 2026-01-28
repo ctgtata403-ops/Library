@@ -36,8 +36,15 @@
         .cat-chip { padding: 6px 15px; background: var(--bg); border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer; border: 1px solid var(--border); color: var(--text); }
         .cat-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-        .item { padding: 12px 10px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        /* ট্রানজ্যাকশন আইটেম ডিজাইন আপডেট */
+        .item { padding: 12px 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: relative; }
+        .item-info { flex-grow: 1; }
         .item small { color: #888; display: block; }
+        .item-actions { display: flex; gap: 12px; align-items: center; }
+        .action-btn { cursor: pointer; font-size: 16px; opacity: 0.6; transition: 0.2s; }
+        .action-btn:hover { opacity: 1; }
+        .delete-btn { color: var(--expense); }
+        .edit-btn { color: var(--primary); }
 
         .fab { position: fixed; bottom: 25px; right: 20px; width: 55px; height: 55px; background: var(--primary); color: #fff; border-radius: 50%; border: none; font-size: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); cursor: pointer; z-index: 90; }
 
@@ -138,7 +145,7 @@
 
 <div class="modal" id="addModal">
     <div class="modal-content">
-        <h3 style="margin:0 0 20px; text-align:center">নতুন হিসাব</h3>
+        <h3 id="modal-title" style="margin:0 0 20px; text-align:center">নতুন হিসাব</h3>
         <div class="type-toggle">
             <div id="toggle-inc" class="type-btn" onclick="setAddType('income')">আয়</div>
             <div id="toggle-exp" class="type-btn active-exp" onclick="setAddType('expense')">ব্যয়</div>
@@ -146,7 +153,7 @@
         <select id="modal-cat"></select>
         <input type="number" id="modal-amount" placeholder="টাকার পরিমাণ">
         <input type="text" id="modal-note" placeholder="বিবরণ লিখুন">
-        <button class="btn-save" onclick="saveTransaction()">অ্যাড করুন</button>
+        <button id="btn-save-transaction" class="btn-save" onclick="saveTransaction()">অ্যাড করুন</button>
         <p onclick="closeModal()" style="text-align:center; color:#888; cursor:pointer; margin-top:15px;">বাতিল</p>
     </div>
 </div>
@@ -160,7 +167,7 @@
     let db = { transactions: [], categories: ['সব', 'নাস্তা', 'বেতন', 'বাজার'], darkMode: false };
     try { const saved = localStorage.getItem('aybey_pro_v19'); if(saved) db = JSON.parse(saved); } catch(e) {}
     
-    let activePeriod = 'month', activeCat = 'সব', currentAddType = 'expense';
+    let activePeriod = 'month', activeCat = 'সব', currentAddType = 'expense', editIndex = null;
 
     function toggleDarkMode() { db.darkMode = document.getElementById('darkModeToggle').checked; applyDarkMode(); saveData(); }
     function applyDarkMode() {
@@ -172,8 +179,29 @@
     function closeSettings() { document.getElementById('settingsScreen').style.display = 'none'; }
     function openCatScreen() { document.getElementById('catScreen').style.display = 'block'; renderCatList(); }
     function closeCatScreen() { document.getElementById('catScreen').style.display = 'none'; }
-    function openAddModal() { document.getElementById('modal-cat').innerHTML = db.categories.filter(c => c !== 'সব').map(c => `<option value="${c}">${c}</option>`).join(''); document.getElementById('addModal').style.display = 'block'; }
-    function closeModal() { document.getElementById('addModal').style.display = 'none'; }
+    
+    function openAddModal(index = null) { 
+        editIndex = index;
+        document.getElementById('modal-cat').innerHTML = db.categories.filter(c => c !== 'সব').map(c => `<option value="${c}">${c}</option>`).join('');
+        
+        if (index !== null) {
+            const t = db.transactions[index];
+            document.getElementById('modal-title').innerText = "হিসাব পরিবর্তন";
+            document.getElementById('modal-amount').value = t.amount;
+            document.getElementById('modal-note').value = t.note;
+            document.getElementById('modal-cat').value = t.cat;
+            setAddType(t.type);
+            document.getElementById('btn-save-transaction').innerText = "আপডেট করুন";
+        } else {
+            document.getElementById('modal-title').innerText = "নতুন হিসাব";
+            document.getElementById('modal-amount').value = '';
+            document.getElementById('modal-note').value = '';
+            document.getElementById('btn-save-transaction').innerText = "অ্যাড করুন";
+        }
+        document.getElementById('addModal').style.display = 'block'; 
+    }
+
+    function closeModal() { document.getElementById('addModal').style.display = 'none'; editIndex = null; }
 
     function setAddType(type) {
         currentAddType = type;
@@ -183,12 +211,25 @@
 
     function saveTransaction() {
         const amt = parseFloat(document.getElementById('modal-amount').value); if(!amt) return;
-        db.transactions.unshift({ type: currentAddType, cat: document.getElementById('modal-cat').value, amount: amt, note: document.getElementById('modal-note').value || (currentAddType==='income'?'আয়':'ব্যয়'), date: new Date().toISOString() });
+        const note = document.getElementById('modal-note').value || (currentAddType==='income'?'আয়':'ব্যয়');
+        const cat = document.getElementById('modal-cat').value;
+
+        if (editIndex !== null) {
+            db.transactions[editIndex] = { ...db.transactions[editIndex], type: currentAddType, cat, amount: amt, note };
+        } else {
+            db.transactions.unshift({ type: currentAddType, cat, amount: amt, note, date: new Date().toISOString() });
+        }
+        
         saveData(); closeModal(); renderMain();
-        document.getElementById('modal-amount').value = ''; document.getElementById('modal-note').value = '';
     }
 
-    // রিপোর্ট ডাউনলোড ফাংশন
+    function deleteTransaction(index) {
+        if(confirm("আপনি কি এই হিসাবটি মুছে ফেলতে চান?")) {
+            db.transactions.splice(index, 1);
+            saveData(); renderMain();
+        }
+    }
+
     function downloadReport(period) {
         const now = new Date();
         const filtered = db.transactions.filter(t => {
@@ -229,11 +270,35 @@
     function renderMain() {
         const list = document.getElementById('main-list'); const search = document.getElementById('searchInput').value.toLowerCase();
         list.innerHTML = ''; let inc = 0, exp = 0; const now = new Date();
-        db.transactions.filter(t => { const d = new Date(t.date); return (t.note.toLowerCase().includes(search) || t.cat.toLowerCase().includes(search)) && (activeCat === 'সব' || t.cat === activeCat) && (activePeriod === 'all' || d.getMonth() === now.getMonth()); }).forEach(t => {
-            if(t.type === 'income') inc += t.amount; else exp += t.amount;
-            list.innerHTML += `<div class="item"><div><strong>${t.note}</strong><small>${t.cat} • ${new Date(t.date).toLocaleDateString('bn-BD')}</small></div><span style="color:${t.type==='income'?'var(--income)':'var(--expense)'}; font-weight:700">${t.type==='income'?'+':'-'} ৳${t.amount.toLocaleString('bn-BD')}</span></div>`;
+        
+        db.transactions.forEach((t, index) => {
+            const d = new Date(t.date);
+            const matchesSearch = t.note.toLowerCase().includes(search) || t.cat.toLowerCase().includes(search);
+            const matchesCat = activeCat === 'সব' || t.cat === activeCat;
+            const matchesPeriod = activePeriod === 'all' || d.getMonth() === now.getMonth();
+
+            if (matchesSearch && matchesCat && matchesPeriod) {
+                if(t.type === 'income') inc += t.amount; else exp += t.amount;
+                
+                list.innerHTML += `
+                <div class="item">
+                    <div class="item-info">
+                        <strong>${t.note}</strong>
+                        <small>${t.cat} • ${d.toLocaleDateString('bn-BD')}</small>
+                    </div>
+                    <div class="item-actions">
+                        <span style="color:${t.type==='income'?'var(--income)':'var(--expense)'}; font-weight:700">
+                            ${t.type==='income'?'+':'-'} ৳${t.amount.toLocaleString('bn-BD')}
+                        </span>
+                        <span class="action-btn edit-btn" onclick="openAddModal(${index})">✏️</span>
+                        <span class="action-btn delete-btn" onclick="deleteTransaction(${index})">🗑️</span>
+                    </div>
+                </div>`;
+            }
         });
-        document.getElementById('top-inc').innerText = inc.toLocaleString('bn-BD'); document.getElementById('top-exp').innerText = exp.toLocaleString('bn-BD');
+
+        document.getElementById('top-inc').innerText = inc.toLocaleString('bn-BD'); 
+        document.getElementById('top-exp').innerText = exp.toLocaleString('bn-BD');
         document.getElementById('top-bal').innerText = '৳ ' + (inc - exp).toLocaleString('bn-BD');
     }
 
