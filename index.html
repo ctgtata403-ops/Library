@@ -7,10 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        /* ফন্ট সবকিছুর জন্য বাধ্যতামূলক */
-        * {
-            font-family: 'Anek Bangla', sans-serif !important;
-        }
+        * { font-family: 'Anek Bangla', sans-serif !important; }
 
         :root { 
             --primary: #2196F3; --income: #4CAF50; --expense: #F44336; 
@@ -23,28 +20,20 @@
 
         body { background: var(--bg); color: var(--text); margin: 0; padding: 0; transition: 0.3s; overflow-x: hidden; }
 
-        /* --- ফিক্সড লোডিং স্ক্রিন এলাইনমেন্ট --- */
+        /* --- লোডিং স্ক্রিন --- */
         #loader-wrapper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #2196F3; display: flex; flex-direction: column;
             justify-content: center; align-items: center; z-index: 9999;
-            transition: opacity 0.4s ease; padding: 20px; box-sizing: border-box;
-            text-align: center;
+            transition: opacity 0.4s ease; padding: 30px; text-align: center; box-sizing: border-box;
         }
         .simple-spinner {
             width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.2);
             border-top: 4px solid white; border-radius: 50%;
-            animation: spin 0.8s linear infinite; margin-bottom: 25px;
+            animation: spin 0.8s linear infinite; margin-bottom: 20px;
         }
-        #quote-text { 
-            color: white; font-size: 19px; line-height: 1.5;
-            font-weight: 600; max-width: 320px; margin: 0 auto 10px auto;
-            display: block;
-        }
-        #quote-ref {
-            color: rgba(255,255,255,0.9); font-size: 14px; font-weight: 400;
-            display: block; margin: 0 auto;
-        }
+        #quote-text { color: white; font-size: 19px; font-weight: 600; margin-bottom: 8px; line-height: 1.5; }
+        #quote-ref { color: rgba(255,255,255,0.8); font-size: 14px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         /* --- মেইন কন্টেইনার --- */
@@ -52,37 +41,35 @@
         header { padding: 15px 20px; background: var(--card-bg); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
         .logo-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .logo { color: var(--primary); font-size: 22px; font-weight: 800; }
-        
-        #searchInput { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 10px; outline: none; background: var(--bg); color: var(--text); box-sizing: border-box; font-size: 15px; }
-        
+        #searchInput { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); box-sizing: border-box; outline: none; }
+
         .period-box { background: var(--bg); padding: 5px; border-radius: 12px; display: flex; border: 1px solid var(--border); margin: 15px 20px; }
-        .period-btn { flex: 1; padding: 10px; border: none; background: transparent; font-weight: 700; cursor: pointer; border-radius: 8px; color: var(--text); font-size: 15px; }
+        .period-btn { flex: 1; padding: 10px; border: none; background: transparent; font-weight: 700; cursor: pointer; border-radius: 8px; color: var(--text); }
         .period-btn.active { background: var(--primary); color: #fff; }
 
-        .summary-card { margin: 10px 15px; padding: 18px; border-radius: 18px; border: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr 1fr; text-align: center; gap: 5px; }
-        .summary-item h4 { margin: 0; font-size: 13px; color: #888; font-weight: 500; }
+        .summary-card { margin: 10px 15px; padding: 18px; border-radius: 18px; border: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr 1fr; text-align: center; }
         .summary-item p { margin: 6px 0 0; font-weight: 800; font-size: 15px; }
 
-        .cat-chip { padding: 8px 18px; background: var(--bg); border-radius: 25px; font-size: 14px; white-space: nowrap; cursor: pointer; border: 1px solid var(--border); color: var(--text); font-weight: 600; transition: 0.2s; }
+        .cat-chip { padding: 8px 18px; background: var(--bg); border-radius: 25px; font-size: 14px; white-space: nowrap; cursor: pointer; border: 1px solid var(--border); font-weight: 600; }
         .cat-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
         .item { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .item-info strong { display: block; font-size: 16px; margin-bottom: 3px; }
-        .item-info small { color: #888; font-size: 12px; }
-        .item-actions { display: flex; gap: 18px; align-items: center; }
-        .action-btn { cursor: pointer; font-size: 18px; opacity: 0.8; transition: 0.2s; }
+        .item-actions { display: flex; gap: 15px; align-items: center; }
+        .action-btn { cursor: pointer; font-size: 18px; opacity: 0.7; }
 
-        .fab { position: fixed; bottom: 30px; right: 20px; width: 60px; height: 60px; background: var(--primary); color: #fff; border-radius: 50%; border: none; font-size: 35px; box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4); cursor: pointer; z-index: 90; display: flex; justify-content: center; align-items: center; }
+        .fab { position: fixed; bottom: 30px; right: 20px; width: 60px; height: 60px; background: var(--primary); color: #fff; border-radius: 50%; border: none; font-size: 35px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); cursor: pointer; z-index: 90; }
 
-        /* --- সেটিংস ও মোডাল --- */
+        /* --- সেটিংস স্ক্রিন --- */
         .screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--card-bg); z-index: 1000; overflow-y: auto; }
         .screen-header { padding: 15px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid var(--border); background: var(--card-bg); position: sticky; top: 0; }
         .profile-card { background: var(--bg); margin: 20px; padding: 25px; border-radius: 20px; border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .profile-img { width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--primary); object-fit: cover; margin-bottom: 15px; }
-        .profile-name { margin: 5px 0; font-size: 20px; font-weight: 800; }
+        .profile-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; margin-bottom: 15px; }
         
-        .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; color: inherit; }
-        
+        /* রিপোর্ট বাটন স্টাইল */
+        .settings-card { background: var(--bg); margin: 10px 20px; padding: 15px; border-radius: 15px; text-align: center; border: 1px solid var(--border); }
+        .download-btn { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 10px; font-size: 14px; flex: 1; }
+
+        .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; color: inherit; }
         .switch { position: relative; display: inline-block; width: 45px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 24px; }
@@ -90,9 +77,15 @@
         input:checked + .slider { background-color: var(--primary); }
         input:checked + .slider:before { transform: translateX(21px); }
 
+        /* --- মোডাল/পপআপ ডিজাইন (আগের মতো) --- */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1100; }
-        .modal-content { background: var(--card-bg); width: 88%; max-width: 380px; margin: 80px auto; border-radius: 22px; padding: 25px; box-sizing: border-box; }
-        .btn-save { width: 100%; padding: 14px; background: var(--primary); color: #fff; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        .modal-content { background: var(--card-bg); width: 85%; max-width: 350px; margin: 80px auto; border-radius: 20px; padding: 25px; color: var(--text); }
+        .type-toggle { display: flex; background: var(--bg); border-radius: 10px; padding: 4px; margin-bottom: 20px; }
+        .type-btn { flex: 1; padding: 10px; text-align: center; cursor: pointer; border-radius: 8px; font-weight: 700; color: #888; }
+        .active-inc { background: var(--income) !important; color: white !important; }
+        .active-exp { background: var(--expense) !important; color: white !important; }
+        input, select { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); box-sizing: border-box; }
+        .btn-save { width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 16px; }
     </style>
 </head>
 <body>
@@ -112,7 +105,7 @@
                 <span onclick="openSettings()" style="cursor:pointer; font-size: 22px;">⚙️</span>
             </div>
         </div>
-        <input type="text" id="searchInput" placeholder="খুঁজুন (বিবরণ বা ক্যাটাগরি)..." oninput="renderMain()">
+        <input type="text" id="searchInput" placeholder="সার্চ করুন..." oninput="renderMain()">
     </header>
 
     <div class="period-box">
@@ -126,76 +119,69 @@
         <div class="summary-item"><h4>ব্যালেন্স</h4><p id="top-bal" style="color:var(--primary)">৳ ০</p></div>
     </div>
 
-    <div style="display: flex; overflow-x: auto; gap: 10px; padding: 10px 20px; scrollbar-width: none;" id="cat-chips"></div>
+    <div style="display: flex; overflow-x: auto; gap: 8px; padding: 10px 20px;" id="cat-chips"></div>
     <div style="padding: 0 15px 100px;" id="main-list"></div>
     <button class="fab" onclick="openAddModal()">+</button>
 </div>
 
 <div id="settingsScreen" class="screen">
-    <div class="screen-header">
-        <span onclick="closeSettings()" style="cursor:pointer; font-size: 24px;">←</span>
-        <strong style="font-size: 20px; font-weight: 700;">সেটিংস</strong>
-    </div>
-    
+    <div class="screen-header"><span onclick="closeSettings()" style="cursor:pointer; font-size: 24px;">←</span><strong>সেটিংস</strong></div>
     <div class="profile-card">
         <img src="https://maruf.lovestoblog.com/wp-content/uploads/2026/01/1000102487-edited-768x768.jpg" alt="Maruf" class="profile-img">
-        <h2 class="profile-name">মজুমদার মো. মারুফ</h2>
-        <div style="color: #666; font-size: 14px; line-height: 1.4;">রেডিওগ্রাফি, প্রথম বর্ষ<br>চট্টগ্রাম সরকারি আইএচটি</div>
+        <h2 class="profile-name" style="margin: 5px 0;">মজুমদার মো. মারুফ</h2>
+        <div style="color: #666; font-size: 14px;">রেডিওগ্রাফি, প্রথম বর্ষ<br>চট্টগ্রাম সরকারি আইএচটি</div>
+    </div>
+
+    <div class="settings-card">
+        <div style="color: var(--primary); font-size: 14px; font-weight: 700;">📊 রিপোর্ট ডাউনলোড করুন</div>
+        <div style="display: flex; gap: 10px; padding: 5px;">
+            <button class="download-btn" onclick="downloadReport('month')">📅 এই মাস</button>
+            <button class="download-btn" style="background:#607D8B" onclick="downloadReport('all')">🗓️ মোট হিসাব</button>
+        </div>
     </div>
 
     <div class="setting-row">
         <div style="display:flex; align-items:center; gap:15px; font-weight:600;"><span>🌙</span> <span>ডার্ক মোড</span></div>
-        <label class="switch">
-            <input type="checkbox" id="darkModeToggle" onclick="toggleDarkMode()">
-            <span class="slider"></span>
-        </label>
+        <label class="switch"><input type="checkbox" id="darkModeToggle" onclick="toggleDarkMode()"><span class="slider"></span></label>
     </div>
-
+    
     <a href="https://www.facebook.com/mazumder.md.maruf" target="_blank" class="setting-row">
-        <div style="display:flex; align-items:center; gap:15px; font-weight:600;">
-            <span style="font-size: 20px;">📱</span> 
-            <span>ডেভেলপারের ফেসবুক</span>
-        </div>
-        <span style="color: var(--primary); font-weight: 700;">ভিজিট 🔗</span>
+        <div style="display:flex; align-items:center; gap:15px; font-weight:600;"><span>📱</span> <span>ডেভেলপার ফেসবুক</span></div><span>🔗</span>
     </a>
 </div>
 
 <div class="modal" id="addModal">
     <div class="modal-content">
-        <h3 id="modal-title" style="margin:0 0 20px; text-align:center; font-weight: 800;">নতুন হিসাব</h3>
-        <div style="display: flex; background: var(--bg); border-radius: 12px; padding: 5px; margin-bottom: 20px;">
-            <div id="toggle-inc" style="flex:1; padding:10px; text-align:center; cursor:pointer; border-radius:8px; font-weight:700;" onclick="setAddType('income')">আয়</div>
-            <div id="toggle-exp" style="flex:1; padding:10px; text-align:center; cursor:pointer; border-radius:8px; font-weight:700;" onclick="setAddType('expense')">ব্যয়</div>
+        <h3 id="modal-title" style="margin:0 0 20px; text-align:center; font-weight:800;">নতুন হিসাব</h3>
+        <div class="type-toggle">
+            <div id="toggle-inc" class="type-btn" onclick="setAddType('income')">আয়</div>
+            <div id="toggle-exp" class="type-btn active-exp" onclick="setAddType('expense')">ব্যয়</div>
         </div>
-        <select id="modal-cat" style="font-weight: 600;"></select>
+        <select id="modal-cat"></select>
         <input type="number" id="modal-amount" placeholder="টাকার পরিমাণ (৳)">
         <input type="text" id="modal-note" placeholder="বিবরণ লিখুন...">
         <button id="btn-save-transaction" class="btn-save" onclick="saveTransaction()">সংরক্ষণ করুন</button>
-        <p onclick="closeModal()" style="text-align:center; color:#888; cursor:pointer; margin-top:15px; font-weight:600;">বাতিল করুন</p>
+        <p onclick="closeModal()" style="text-align:center; color:#888; cursor:pointer; margin-top:15px; font-weight:600;">বাতিল</p>
     </div>
 </div>
 
 <div id="catScreen" class="screen">
-    <div class="screen-header"><span onclick="closeCatScreen()" style="cursor:pointer; font-size: 24px;">←</span><strong>ক্যাটাগরি ম্যানেজমেন্ট</strong></div>
-    <div style="padding: 20px;">
-        <input type="text" id="newCatInput" placeholder="নতুন ক্যাটাগরি নাম...">
-        <button class="btn-save" onclick="addCategory()">+ ক্যাটাগরি যোগ করুন</button>
-        <div id="cat-list-container" style="margin-top:25px;"></div>
-    </div>
+    <div class="screen-header"><span onclick="closeCatScreen()" style="cursor:pointer; font-size: 24px;">←</span><strong>ক্যাটাগরি</strong></div>
+    <div style="padding: 20px;"><input type="text" id="newCatInput" placeholder="নতুন ক্যাটাগরি..."><button class="btn-save" onclick="addCategory()">যোগ করুন</button><div id="cat-list-container" style="margin-top:20px;"></div></div>
 </div>
 
 <script>
-    let db = { transactions: [], categories: ['সব', 'নাস্তা', 'বেতন', 'বাজার', 'ভাড়া', 'অন্যান্য'], darkMode: false };
-    try { const saved = localStorage.getItem('aybey_pro_v23'); if(saved) db = JSON.parse(saved); } catch(e) {}
+    let db = { transactions: [], categories: ['সব', 'নাস্তা', 'বেতন', 'বাজার', 'ভাড়া'], darkMode: false };
+    try { const saved = localStorage.getItem('aybey_pro_v24'); if(saved) db = JSON.parse(saved); } catch(e) {}
     
     let activePeriod = 'month', activeCat = 'সব', currentAddType = 'expense', editIndex = null;
 
     const islamicQuotes = [
         { text: "“নিশ্চয়ই অপব্যয়কারীরা শয়তানের ভাই।”", ref: "— সূরা আল-ইসরা, আয়াত: ২৭" },
         { text: "“তোমরা খাও ও পান করো, কিন্তু অপচয় করো না।”", ref: "— সূরা আল-আরাফ, আয়াত: ৩১" },
-        { text: "“মিতব্যয়ী হওয়া বুদ্ধিমত্তার অর্ধেক।”", ref: "— মিশকাতুল মাসাবিহ, হাদীস: ৫২২৬" },
-        { text: "“যে মিতব্যয়ী হয়, সে কখনো নিঃস্ব হয় না।”", ref: "— মুসনাদে আহমাদ, হাদীস: ৪২৬৯" },
-        { text: "“কিয়ামতের দিন জিজ্ঞাসা করা হবে— সম্পদ কোন পথে আয় এবং ব্যয় করেছো?”", ref: "— তিরমিযী, হাদীস: ২৪১৬" }
+        { text: "“মিতব্যয়ী হওয়া বুদ্ধিমত্তার অর্ধেক।”", ref: "— মিশকাতুল মাসাবিহ, ৫২২৬" },
+        { text: "“যে মিতব্যয়ী হয়, সে কখনো নিঃস্ব হয় না।”", ref: "— মুসনাদে আহমাদ, ৪২৬৯" },
+        { text: "“সম্পদ কোন পথে আয় এবং ব্যয় করেছো— তার হিসাব দিতে হবে।”", ref: "— তিরমিযী, ২৪১৬" }
     ];
 
     function showRandomQuote() {
@@ -255,10 +241,8 @@
 
     function setAddType(type) {
         currentAddType = type;
-        document.getElementById('toggle-inc').style.background = type === 'income' ? 'var(--income)' : 'transparent';
-        document.getElementById('toggle-inc').style.color = type === 'income' ? '#fff' : '#888';
-        document.getElementById('toggle-exp').style.background = type === 'expense' ? 'var(--expense)' : 'transparent';
-        document.getElementById('toggle-exp').style.color = type === 'expense' ? '#fff' : '#888';
+        document.getElementById('toggle-inc').className = type === 'income' ? 'type-btn active-inc' : 'type-btn';
+        document.getElementById('toggle-exp').className = type === 'expense' ? 'type-btn active-exp' : 'type-btn';
     }
 
     function saveTransaction() {
@@ -274,19 +258,37 @@
     }
 
     function deleteTransaction(index) {
-        if(confirm("এই হিসাবটি কি মুছে ফেলতে চান?")) {
+        if(confirm("মুছে ফেলতে চান?")) {
             db.transactions.splice(index, 1);
             saveData(); renderMain();
         }
+    }
+
+    function downloadReport(period) {
+        showLoader();
+        setTimeout(() => {
+            const now = new Date();
+            const filtered = db.transactions.filter(t => {
+                const d = new Date(t.date);
+                return period === 'all' || (d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear());
+            });
+            if(filtered.length === 0) { alert("কোনো ডাটা নেই!"); hideLoader(); return; }
+            const data = filtered.map(t => ({ 'তারিখ': new Date(t.date).toLocaleDateString('bn-BD'), 'বিবরণ': t.note, 'ক্যাটাগরি': t.cat, 'ধরণ': t.type === 'income' ? 'আয়' : 'ব্যয়', 'পরিমাণ': t.amount }));
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "হিসাব");
+            XLSX.writeFile(wb, `Hisab_Report_${period}.xlsx`);
+            hideLoader();
+        }, 1000);
     }
 
     function addCategory() {
         const val = document.getElementById('newCatInput').value.trim();
         if(val && !db.categories.includes(val)) { db.categories.push(val); saveData(); renderCatList(); renderCats(); document.getElementById('newCatInput').value = ''; }
     }
-    function renderCatList() { document.getElementById('cat-list-container').innerHTML = db.categories.filter(c => c !== 'সব').map(c => `<div style="display:flex; justify-content:space-between; padding:15px; border-bottom:1px solid var(--border);"><strong>${c}</strong><span onclick="deleteCat('${c}')" style="color:red; cursor:pointer; font-weight:700;">মুছুন</span></div>`).join(''); }
+    function renderCatList() { document.getElementById('cat-list-container').innerHTML = db.categories.filter(c => c !== 'সব').map(c => `<div style="display:flex; justify-content:space-between; padding:15px; border-bottom:1px solid var(--border);"><span>${c}</span><span onclick="deleteCat('${c}')" style="color:red; cursor:pointer">মুছুন</span></div>`).join(''); }
     function deleteCat(c) { db.categories = db.categories.filter(cat => cat !== c); saveData(); renderCatList(); renderCats(); }
-    function saveData() { localStorage.setItem('aybey_pro_v23', JSON.stringify(db)); }
+    function saveData() { localStorage.setItem('aybey_pro_v24', JSON.stringify(db)); }
     function setPeriod(p) { activePeriod = p; document.getElementById('btn-month').classList.toggle('active', p === 'month'); document.getElementById('btn-all').classList.toggle('active', p === 'all'); renderMain(); }
     function renderCats() { document.getElementById('cat-chips').innerHTML = db.categories.map(c => `<div class="cat-chip ${activeCat === c ? 'active' : ''}" onclick="activeCat='${c}';renderCats();renderMain();">${c}</div>`).join(''); }
 
@@ -298,7 +300,7 @@
             const isThisMonth = (d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear());
             if ((t.note.toLowerCase().includes(search) || t.cat.toLowerCase().includes(search)) && (activeCat === 'সব' || t.cat === activeCat) && (activePeriod === 'all' || isThisMonth)) {
                 if(t.type === 'income') inc += t.amount; else exp += t.amount;
-                list.innerHTML += `<div class="item"><div class="item-info"><strong>${t.note}</strong><small>${t.cat} • ${d.toLocaleDateString('bn-BD')}</small></div><div class="item-actions"><span style="color:${t.type==='income'?'var(--income)':'var(--expense)'}; font-weight:800">${t.type==='income'?'+':'-'} ৳${t.amount.toLocaleString('bn-BD')}</span><span class="action-btn" onclick="openAddModal(${index})">✏️</span><span class="action-btn" onclick="deleteTransaction(${index})">🗑️</span></div></div>`;
+                list.innerHTML += `<div class="item"><div><strong>${t.note}</strong><br><small style="color:#888">${t.cat} • ${d.toLocaleDateString('bn-BD')}</small></div><div class="item-actions"><span style="color:${t.type==='income'?'var(--income)':'var(--expense)'}; font-weight:800">${t.type==='income'?'+':'-'} ৳${t.amount.toLocaleString('bn-BD')}</span><span class="action-btn" onclick="openAddModal(${index})">✏️</span><span class="action-btn" onclick="deleteTransaction(${index})">🗑️</span></div></div>`;
             }
         });
         document.getElementById('top-inc').innerText = inc.toLocaleString('bn-BD'); 
